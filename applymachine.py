@@ -5,6 +5,7 @@ import colorama as cl
 import json
 import os
 from datetime import datetime, timedelta
+import hashlib
 
 # 初始化 colorama
 cl.init()
@@ -61,7 +62,12 @@ def display_status(gpus, status):
 
 def add_gpu(gpus):
     """添加 GPU"""
-    new_gpu = input("Enter the name of the new GPU: ")
+    while True:
+        new_gpu = input("Enter the name of the new GPU: ")
+        if new_gpu in gpus:
+            print("Duplicate Name, Input Again:")
+        else:
+            break
     gpus.append(new_gpu)
 
 def delete_gpu(gpus):
@@ -101,7 +107,7 @@ def occupy_gpu(gpus, status):
     end_time = (datetime.now() + timedelta(hours=duration)).isoformat()
 
     # 更新状态
-    status.append({"name": gpu_name, "start_time": datetime.now().isoformat(), "end_time": end_time, "user": user, "password": password})
+    status.append({"name": gpu_name, "start_time": datetime.now().isoformat(), "end_time": end_time, "user": user, "password": hashlib.md5(password.encode("utf-8")).hexdigest()})
 
 def release_gpu(status):
     """释放 GPU 占用"""
@@ -126,6 +132,7 @@ def release_gpu(status):
 
     gpu_to_release = occupied_gpus[choice]
     password = input("Enter the password to release occupation: ")
+    password = hashlib.md5(password.encode("utf-8")).hexdigest()
 
     # 检查密码是否正确
     if gpu_to_release["password"] == password:
