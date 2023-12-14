@@ -56,11 +56,11 @@ def display_status(gpus, status):
 
         # 如果找到了状态且 GPU 被占用
         if gpu_status:
-            occupied = multiline_color(Fore.YELLOW, Back.RED, Style.RESET_ALL, text2art(f"{gpu}--Occupied", font="tarty1"))
+            occupied = multiline_color(Fore.YELLOW, Back.RED, Style.RESET_ALL, text2art(f"{gpu}--Occupied", font="aquaplan"))
             print(f"{occupied}\nby {gpu_status['user']} until {gpu_status['end_time']}\n")
         else:
             # 否则认为 GPU 空闲
-            available = multiline_color(Fore.WHITE, Back.GREEN, Style.RESET_ALL, text2art(f"{gpu}--Available", font="tarty1"))
+            available = multiline_color(Fore.WHITE, Back.GREEN, Style.RESET_ALL, text2art(f"{gpu}--Available", font="aquaplan"))
             print(f"{available}\n")
 
 def add_gpu(gpus):
