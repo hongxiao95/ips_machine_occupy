@@ -10,6 +10,9 @@ import hashlib
 # 初始化 colorama
 cl.init()
 
+def multiline_color(fore_color, back_color, reset_cmd, multiline_text):
+    return '\r\n'.join([fore_color + back_color + line + reset_cmd for line in multiline_text.split("\n")])
+
 def load_gpu_list():
     """从文件中加载 GPU 列表"""
     if os.path.exists("gpulist.txt"):
@@ -53,11 +56,11 @@ def display_status(gpus, status):
 
         # 如果找到了状态且 GPU 被占用
         if gpu_status:
-            occupied = Back.RED + text2art(f"{gpu} Occupied") + Style.RESET_ALL
-            print(f"{occupied} by {gpu_status['user']} until {gpu_status['end_time']}\n")
+            occupied = multiline_color(Fore.YELLOW, Back.RED, Style.RESET_ALL, text2art(f"{gpu}--Occupied", font="tarty1"))
+            print(f"{occupied}\nby {gpu_status['user']} until {gpu_status['end_time']}\n")
         else:
             # 否则认为 GPU 空闲
-            available = Back.GREEN + text2art(f"{gpu} Available") + Style.RESET_ALL
+            available = multiline_color(Fore.WHITE, Back.GREEN, Style.RESET_ALL, text2art(f"{gpu}--Available", font="tarty1"))
             print(f"{available}\n")
 
 def add_gpu(gpus):
@@ -158,7 +161,7 @@ def main():
 
     # 用户交互部分
     while True:
-        print("\nOptions: [1] Add GPU [2] Delete GPU [3] Occupy GPU [4] Release GPU [5] Exit")
+        print("\nOptions: \n[1] Add GPU \n[2] Delete GPU \n[3] Occupy GPU \n[4] Release GPU \n[5] Exit")
         choice = input("Enter your choice: ")
         if choice == '1':
             add_gpu(gpus)
